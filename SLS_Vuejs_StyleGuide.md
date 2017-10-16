@@ -69,7 +69,7 @@ Vue.component('example',
 
 ```javascript    
     contactParent: function () {
-            this.$emit('contact_parent');
+            this.$emit('contact-parent');
     }
 ```
 
@@ -97,14 +97,47 @@ BAD BAD
     // you'll never see that ^  update.  You blew it.
 ```
 
-* DO NOT USE camel case when using the emit functions on components.  
+* DO NOT USE camel case when using the emit functions on components. Camel case will break the emit function.  Instead use kebab case in JavaScript and html.
 
 ```javascript
 	contactParent: function () {
-            this.$emit('this_must_not_be_camel_case');
+            this.$emit('this-must-not-be-camel-case');
     }
 ```
     
 ```html
-    <example v-on:this_must_not_be_camel_case="doStuff"></example>
+    <example v-on:this-must-not-be-camel-case="doStuff"></example>
+```
+
+* DO NOT USE camel case in html when passing a [prop to components](https://vuejs.org/v2/guide/components.html#camelCase-vs-kebab-case).  Use Camel case in JavaScript and kebab in the html.
+
+Good
+
+```html
+    <example prop-wanted-in-this-component="iCanUseCamelCaseHere"></example>
+```
+```javascript
+    props: {
+            propWantedInThisComponent: {
+                type: String,
+                default: function() { return 'Good job not using kebab in here' }
+            }
+        },
+```
+   
+Bad, will break in html
+
+```html
+    <example propWantedInThisComponent="iCanUseCamelCaseHere"></example>
+```
+
+Bad, will break in JavaScript
+
+```javascript
+    props: {
+            prop-wanted-in-this-component: {
+                type: String,
+                default: function() { return 'Bad job, you blew it' }
+            }
+        },
 ```
